@@ -18,6 +18,7 @@ public abstract class Product {
     private int stockBalance;
     private int sales;
     private double price;
+    protected String type = getClass().getName();
 
     public Product(int productID, String name, Date releaseDate, int stockBalance, int sales, double price) {
         this.productID = productID;

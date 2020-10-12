@@ -3,9 +3,12 @@ package products;
 import dao.DAO;
 import lombok.Getter;
 
+import java.util.List;
+
 public class ProductManager {
     @Getter
     private final DAO dao;
+    @Getter
     private double income;
 
     public ProductManager(DAO dao) {
@@ -23,6 +26,7 @@ public class ProductManager {
                 .editStockBalance(oldProduct.getStockBalance() - 1);
             dao.remove(oldProduct.getProductID());
             dao.update(newProduct);
+            income += newProduct.getPrice();
         }
     }
 
@@ -34,6 +38,7 @@ public class ProductManager {
                 .editStockBalance(oldProduct.getStockBalance() - count);
             dao.remove(oldProduct.getProductID());
             dao.update(newProduct);
+            income += newProduct.getPrice() * count;
         }
     }
 
@@ -50,9 +55,11 @@ public class ProductManager {
         return product.toString();
     }
 
-    public double getIncome() {
-        for (Product product : dao.selectAll())
-            income += product.getSales() * product.getPrice();
-        return income;
+    public List<Product> getAllProducts() {
+        return dao.selectAll();
+    }
+
+    public Product getProductByID(int id) {
+        return dao.getProductByID(id).orElseThrow();
     }
 }

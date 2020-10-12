@@ -2,11 +2,13 @@ package dao.CLI;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import dao.DAO;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import products.Book;
 import products.Journal;
+import products.Newspaper;
 import products.Product;
 
 import java.io.BufferedWriter;
@@ -25,9 +27,14 @@ import java.util.stream.Collectors;
 
 public class ConsoleDAO implements DAO {
     private final Path PATH = Paths.get("src/main/resources/db.json");
+    RuntimeTypeAdapterFactory<Product> adapter = RuntimeTypeAdapterFactory.of(Product.class, "type")
+        .registerSubtype(Book.class, Book.class.getName())
+        .registerSubtype(Journal.class, Journal.class.getName())
+        .registerSubtype(Newspaper.class, Newspaper.class.getName());
+
     private final Gson gson = new GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(Book.class, new ProductSerializerDeserializer())
+        .registerTypeAdapterFactory(adapter)
         .create();
 
     private final Gson gson2 = new GsonBuilder()
@@ -40,7 +47,7 @@ public class ConsoleDAO implements DAO {
 
 //    @SneakyThrows
     public ConsoleDAO() {
-//        products = selectAll();
+        products.addAll(selectAll());
         try {
             products.add(new Book.BookBuilder()
                 .setName("book1")
@@ -81,18 +88,18 @@ public class ConsoleDAO implements DAO {
 
     @Override
     public List<Product> selectAll() {
-//        var json = "";
-//        try {
-//            json = Files.readAllLines(PATH).toString();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        var products = new ArrayList<Product>();
+        var json = "";
+        try {
+            json = Files.readAllLines(PATH).toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-//        var temp = gson.fromJson(json, Product[].class);
-//        return Arrays.stream(temp).collect(Collectors.toList());
-        return products;
+//        var temp = new ArrayList<Product>();
+
+        var temp = gson.fromJson(json, Product[].class);
+        return Arrays.stream(temp).collect(Collectors.toList());
+//        return temp;
     }
 
     @Override
@@ -110,14 +117,17 @@ public class ConsoleDAO implements DAO {
     @Override
     public void update(Product product) {
         products.add(product);
-//        try (BufferedWriter writer = Files.newBufferedWriter(PATH, StandardCharsets.UTF_8)) {
-//            writer.write("[");
-//            for (Product elem : products)
-//                writer.write(gson2.toJson(elem));
-//            writer.write("]");
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
+        try (BufferedWriter writer = Files.newBufferedWriter(PATH, StandardCharsets.UTF_8)) {
+            writer.write("[");
+            var json = new ArrayList<String>();
+            for (Product elem : products)
+//                writer.write(gson.toJson(elem));
+                json.add(gson.toJson(elem));
+            writer.write(String.join(",", json));
+            writer.write("]");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
