@@ -11,6 +11,7 @@ public class Book extends Product {
     private String author;
     @Getter
     private int pages;
+//    protected String type = getClass().getName();
 
     public Book(int productID, String name,
                 Date releaseDate, int stockBalance,
@@ -19,6 +20,8 @@ public class Book extends Product {
         super(productID, name, releaseDate, stockBalance, sales, price);
         this.author = author;
         this.pages = pages;
+        type = getClass().getName();
+        System.out.println("I am in the Book.class");
     }
 
     @Override
@@ -78,6 +81,7 @@ public class Book extends Product {
         private double price;
         private String author;
         private int pages;
+        private String type;
 
         public BookBuilder setProductID(int productID) {
             this.productID = productID;
@@ -116,6 +120,11 @@ public class Book extends Product {
 
         public BookBuilder setPages(int pages) {
             this.pages = pages;
+            return this;
+        }
+
+        public BookBuilder setType(String type) {
+            this.type = type;
             return this;
         }
 

@@ -59,6 +59,15 @@ public class ProductManager {
         return dao.selectAll();
     }
 
+    public void update(Product product) {
+        if (dao.selectAll().stream().anyMatch(x -> x.getProductID() == product.getProductID()))
+            dao.remove(dao.selectAll()
+                .stream()
+                .filter(x -> x.getProductID() == product.getProductID())
+                .findFirst().get().getProductID());
+        dao.update(product);
+    }
+
     public Product getProductByID(int id) {
         return dao.getProductByID(id).orElseThrow();
     }

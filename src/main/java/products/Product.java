@@ -3,7 +3,9 @@ package products;
 //import lombok.BookBuilder;
 
 import lombok.Data;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 import java.util.Date;
 
@@ -18,6 +20,7 @@ public abstract class Product {
     private int stockBalance;
     private int sales;
     private double price;
+    @Setter @NonFinal
     protected String type = getClass().getName();
 
     public Product(int productID, String name, Date releaseDate, int stockBalance, int sales, double price) {
@@ -27,6 +30,7 @@ public abstract class Product {
         this.stockBalance = stockBalance;
         this.sales = sales;
         this.price = price;
+        System.out.println("I am in the product");
     }
 
     public Product(int productID, int sales) {

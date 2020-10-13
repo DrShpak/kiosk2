@@ -17,6 +17,7 @@ public class Journal extends Product {
         super(productID, name, releaseDate, stockBalance, sales, price);
         this.issue = issue;
         this.pages = pages;
+        type = getClass().getName();
     }
 
     @Override

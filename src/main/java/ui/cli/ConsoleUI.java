@@ -1,4 +1,4 @@
-package ui;
+package ui.cli;
 
 import dao.DAO;
 import products.Product;
@@ -6,7 +6,7 @@ import products.Product;
 import java.util.List;
 import java.util.Optional;
 
-public class ConsoleDAO implements DAO {
+public class ConsoleUI implements DAO {
     @Override
     public List<Product> selectAll() {
         return null;

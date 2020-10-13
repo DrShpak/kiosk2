@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import dao.DAO;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import products.Book;
 import products.Journal;
 import products.Newspaper;
@@ -24,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ConsoleDAO implements DAO {
     private final Path PATH = Paths.get("src/main/resources/db.json");
@@ -37,69 +37,26 @@ public class ConsoleDAO implements DAO {
         .registerTypeAdapterFactory(adapter)
         .create();
 
-    private final Gson gson2 = new GsonBuilder()
-        .setPrettyPrinting()
-        .registerTypeAdapter(Journal.class, new ProductSerializerDeserializer())
-        .registerTypeAdapter(Book.class, new ProductSerializerDeserializer())
-        .create();
     @Getter
     private final List<Product> products = new ArrayList<>();
 
-//    @SneakyThrows
     public ConsoleDAO() {
         products.addAll(selectAll());
-        try {
-            products.add(new Book.BookBuilder()
-                .setName("book1")
-                .setPrice(100.0)
-                .setReleaseDate(new SimpleDateFormat("dd/MM/yyyy").parse("10/10/1991"))
-                .setAuthor("lox")
-                .setProductID(1)
-                .setPages(100)
-                .setSales(0)
-                .setStockBalance(10)
-                .buildBook());
-
-            products.add(new Book.BookBuilder()
-                .setName("book2")
-                .setPrice(200.0)
-                .setReleaseDate(new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1991"))
-                .setAuthor("flower lox")
-                .setProductID(2)
-                .setPages(2300)
-                .setSales(0)
-                .setStockBalance(110)
-                .buildBook());
-
-            products.add(new Journal.JournalBuilder()
-                .setName("journal1")
-                .setPrice(250.0)
-                .setReleaseDate(new SimpleDateFormat("dd/MM/yyyy").parse("02/02/2002"))
-                .setIssue(10)
-                .setProductID(3)
-                .setPages(2300)
-                .setSales(0)
-                .setStockBalance(110)
-                .buildJournal());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public List<Product> selectAll() {
-        var json = "";
+        var data = "";
         try {
-            json = Files.readAllLines(PATH).toString();
+            Stream<String> lines = Files.lines(PATH);
+            data = lines.collect(Collectors.joining("\n"));
+            lines.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        var temp = new ArrayList<Product>();
-
-        var temp = gson.fromJson(json, Product[].class);
+        var temp = gson.fromJson(data, Product[].class);
+        Arrays.stream(temp).forEach(x -> x.setType(x.getClass().getName()));
         return Arrays.stream(temp).collect(Collectors.toList());
-//        return temp;
     }
 
     @Override
@@ -118,13 +75,10 @@ public class ConsoleDAO implements DAO {
     public void update(Product product) {
         products.add(product);
         try (BufferedWriter writer = Files.newBufferedWriter(PATH, StandardCharsets.UTF_8)) {
-            writer.write("[");
-            var json = new ArrayList<String>();
-            for (Product elem : products)
-//                writer.write(gson.toJson(elem));
-                json.add(gson.toJson(elem));
-            writer.write(String.join(",", json));
-            writer.write("]");
+//            var json = new StringBuilder();
+//            for (Product elem : products)
+//                json.append(gson.toJson(elem));
+            writer.write(gson.toJson(products));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
