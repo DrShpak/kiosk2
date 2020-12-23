@@ -2,6 +2,8 @@ package ui.cli;
 
 import com.google.gson.GsonBuilder;
 import dao.CLI.ConsoleDAO;
+import dao.db.BookDAOImpl;
+import dao.db.JournalDAOImpl;
 import products.Book;
 import products.Journal;
 import products.ProductManager;
@@ -14,20 +16,26 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-        var mngr = new ProductManager(new ConsoleDAO());
+        var mngr = new ProductManager(new BookDAOImpl());
 
+
+
+//        System.out.println(bookMngr.getAllProducts());
+
+//        mngr.getAllProducts();
+//        mngr.addProduct(new Book.BookBuilder()
+//            .setName("Юрий Дудь - не тупой.")
+//            .setPrice(100.0)
+//            .setAuthor("Юрий Дудь")
+//            .setProductID(6)
+//            .setPages(1)
+//            .setSales(0)
+//            .setPublisher("lolov")
+//            .setStockBalance(1)
+//            .buildBook());
         /*add Product to store*/
 //        try {
-//            mngr.update(new Book.BookBuilder()
-//                .setName("Юрий Дудь - не тупой.")
-//                .setPrice(100.0)
-//                .setReleaseDate(new SimpleDateFormat("dd/MM/yyyy").parse("11/11/2019"))
-//                .setAuthor("Юрий Дудь")
-//                .setProductID(6)
-//                .setPages(1)
-//                .setSales(0)
-//                .setStockBalance(1)
-//                .buildBook());
+
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
@@ -51,8 +59,8 @@ public class Main {
         method editName() return a new Product
         update it
          */
-        mngr.update(mngr.getProductByID(1).editName("БОГАТЫЙ ПАПА, БЕДНЫЙ ПАПА - ТОП КНИГА (нет)"));
-        mngr.getAllProducts().forEach(System.out::println);
-        System.out.println("\n\n");
+        mngr.update(mngr.getProductByID(2).editName("БОГ"));
+//        mngr.getAllProducts().forEach(System.out::println);
+//        System.out.println("\n\n");
     }
 }

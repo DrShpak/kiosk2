@@ -2,12 +2,13 @@ package products;
 
 import dao.DAO;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 public class ProductManager {
-    @Getter
-    private final DAO dao;
+    @Getter@Setter
+    private DAO dao;
     @Getter
     private double income;
 
@@ -51,7 +52,7 @@ public class ProductManager {
     }
 
     public String getInfo(int productID) {
-        var product = dao.getProductByID(productID).orElseThrow();
+        var product = dao.getProductByID(productID).orElseThrow(() -> new RuntimeException("Product with " + productID + " doesn't exist!"));
         return product.toString();
     }
 
@@ -60,15 +61,14 @@ public class ProductManager {
     }
 
     public void update(Product product) {
-        if (dao.selectAll().stream().anyMatch(x -> x.getProductID() == product.getProductID()))
-            dao.remove(dao.selectAll()
-                .stream()
-                .filter(x -> x.getProductID() == product.getProductID())
-                .findFirst().get().getProductID());
         dao.update(product);
     }
 
+    public void addProduct(Product product) {
+        dao.insert(product);
+    }
+
     public Product getProductByID(int id) {
-        return dao.getProductByID(id).orElseThrow();
+        return dao.getProductByID(id).get();
     }
 }

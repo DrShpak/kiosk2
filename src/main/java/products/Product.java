@@ -30,7 +30,7 @@ public abstract class Product {
         this.stockBalance = stockBalance;
         this.sales = sales;
         this.price = price;
-        System.out.println("I am in the product");
+//        System.out.println("I am in the product");
     }
 
     public Product(int productID, int sales) {

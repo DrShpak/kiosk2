@@ -67,11 +67,6 @@ public class ConsoleDAO implements DAO {
     }
 
     @Override
-    public void update(int productID) {
-
-    }
-
-    @Override
     public void update(Product product) {
         products.add(product);
         try (BufferedWriter writer = Files.newBufferedWriter(PATH, StandardCharsets.UTF_8)) {
@@ -90,5 +85,10 @@ public class ConsoleDAO implements DAO {
             .filter(x -> x.getProductID() == productID)
             .findFirst()
             .ifPresent(products::remove);
+    }
+
+    @Override
+    public void insert(Product product) {
+
     }
 }

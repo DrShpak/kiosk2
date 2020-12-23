@@ -11,17 +11,18 @@ public class Book extends Product {
     private String author;
     @Getter
     private int pages;
-//    protected String type = getClass().getName();
+    @Getter
+    private String publisher;
+
 
     public Book(int productID, String name,
                 Date releaseDate, int stockBalance,
                 int sales, double price,
-                String author, int pages) {
+                String author, int pages, String publisher) {
         super(productID, name, releaseDate, stockBalance, sales, price);
         this.author = author;
         this.pages = pages;
-        type = getClass().getName();
-        System.out.println("I am in the Book.class");
+        this.publisher = publisher;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class Book extends Product {
         return new Book(newID, getName(),
             getReleaseDate(), getStockBalance(),
             getSales(), getPrice(),
-            getAuthor(), pages);
+            getAuthor(), pages, publisher);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class Book extends Product {
         return new Book(getProductID(), newName,
             getReleaseDate(), getStockBalance(),
             getSales(), getPrice(),
-            getAuthor(), pages);
+            getAuthor(), pages, publisher);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class Book extends Product {
         return new Book(getProductID(), getName(),
             newReleaseDate, getStockBalance(),
             getSales(), getPrice(),
-            getAuthor(), pages);
+            getAuthor(), pages, publisher);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class Book extends Product {
         return new Book(getProductID(), getName(),
             getReleaseDate(), getStockBalance(),
             getSales(), price,
-            getAuthor(), pages);
+            getAuthor(), pages, publisher);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class Book extends Product {
         return new Book(getProductID(), getName(),
             getReleaseDate(), stockBalance,
             getSales(), getPrice(),
-            author, pages);
+            author, pages, publisher);
     }
 
     @Override
@@ -69,19 +70,19 @@ public class Book extends Product {
         return new Book(getProductID(), getName(),
             getReleaseDate(), getStockBalance(),
             sales, getPrice(),
-            getAuthor(), pages);
+            getAuthor(), pages, publisher);
     }
 
     public static class BookBuilder {
         private int productID;
         private String name;
-        private Date releaseDate;
+        private Date releaseDate = null; //ненужное поле
         private int stockBalance;
         private int sales;
         private double price;
         private String author;
         private int pages;
-        private String type;
+        private String publisher;
 
         public BookBuilder setProductID(int productID) {
             this.productID = productID;
@@ -123,13 +124,13 @@ public class Book extends Product {
             return this;
         }
 
-        public BookBuilder setType(String type) {
-            this.type = type;
+        public BookBuilder setPublisher(String publisher) {
+            this.publisher = publisher;
             return this;
         }
 
         public Book buildBook() {
-            return new Book(productID, name, releaseDate, stockBalance, sales, price, author, pages);
+            return new Book(productID, name, releaseDate, stockBalance, sales, price, author, pages, publisher);
         }
     }
 

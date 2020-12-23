@@ -91,7 +91,7 @@ public class Newspaper extends Product {
             .setReleaseDate(getReleaseDate())
             .setSales(getSales() + sales)
             .setStockBalance(getStockBalance())
-            .buildJournal();
+            .buildNewspaper();
     }
 
     public Newspaper editIssue(int issue) {
@@ -103,7 +103,7 @@ public class Newspaper extends Product {
             .setReleaseDate(getReleaseDate())
             .setSales(getSales())
             .setStockBalance(getStockBalance())
-            .buildJournal();
+            .buildNewspaper();
     }
 
     public static class NewspaperBuilder {
@@ -150,7 +150,7 @@ public class Newspaper extends Product {
             return this;
         }
 
-        public Newspaper buildJournal() {
+        public Newspaper buildNewspaper() {
             return new Newspaper(productID, name, releaseDate, stockBalance, sales, price, issue);
         }
     }
